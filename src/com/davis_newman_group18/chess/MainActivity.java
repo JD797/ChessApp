@@ -1,0 +1,44 @@
+package com.davis_newman_group18.chess;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends Activity {
+	
+	Button playButton;
+	Button playbackButton;
+	
+	Intent newGame;
+	Intent recordedGames;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		playButton = (Button) findViewById(R.id.playButton);
+		playbackButton = (Button) findViewById(R.id.playbackButton);
+		newGame = new Intent(this, ChessGame.class);
+		recordedGames = new Intent(this, RecordedGames.class);
+		
+		playButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				startActivity(newGame);
+			}
+		});
+		
+		playbackButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				startActivity(recordedGames);
+			}
+		});
+		
+	}
+}

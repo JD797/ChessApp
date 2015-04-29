@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ChessApp</string>
+    <string name="title">Chess</string>
+    <string name="play">New Game</string>
+    <string name="playback">Playback Recorded Games</string>
+    <string name="title_activity_chess_game">ChessGame</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_recorded_games">RecordedGames</string>
+
+</resources>
