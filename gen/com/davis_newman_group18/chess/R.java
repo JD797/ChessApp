@@ -11,7 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int chessboard=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
         public static final int ai=0x7f060002;
@@ -33,13 +34,16 @@ public final class R {
         public static final int activity_recorded_games=0x7f030002;
     }
     public static final class string {
+        public static final int ai=0x7f040007;
         public static final int app_name=0x7f040000;
-        public static final int hello_world=0x7f040005;
+        public static final int draw=0x7f040008;
         public static final int play=0x7f040002;
         public static final int playback=0x7f040003;
+        public static final int resign=0x7f040009;
         public static final int title=0x7f040001;
         public static final int title_activity_chess_game=0x7f040004;
-        public static final int title_activity_recorded_games=0x7f040006;
+        public static final int title_activity_recorded_games=0x7f040005;
+        public static final int undo=0x7f040006;
     }
     public static final class style {
         /** 
