@@ -2,8 +2,12 @@ package com.davis_newman_group18.chess;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Button;
 
 public class ChessGame extends Activity {
+	
+	Button undo, ai, draw, resign;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
