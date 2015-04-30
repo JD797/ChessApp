@@ -1,5 +1,12 @@
 package com.davis_newman_group18.chess;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,10 +31,13 @@ public class MainActivity extends Activity {
 		newGame = new Intent(this, ChessGame.class);
 		recordedGames = new Intent(this, RecordedGames.class);
 		
+		readData();
+		
 		playButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
+				ChessGame.replayingGame = false;
 				startActivity(newGame);
 			}
 		});
@@ -41,4 +51,24 @@ public class MainActivity extends Activity {
 		});
 		
 	}
+	
+	public void readData() {
+		
+		InputStream is;
+		ObjectInputStream ois;
+		is = getResources().openRawResource(R.raw.saved_games);
+		
+		try {
+			ois = new ObjectInputStream(is);
+			ArrayList<SavedGame> savedGames = (ArrayList<SavedGame>)ois.readObject();
+			// TODO is savedGames null here if the file is blank? need to test
+			if (savedGames == null)	
+				SavedGame.savedGames = new ArrayList<SavedGame>();
+			else
+				SavedGame.savedGames = savedGames;	
+		} catch (Exception e) {
+			SavedGame.savedGames = new ArrayList<SavedGame>();
+		}
+	}
+	
 }

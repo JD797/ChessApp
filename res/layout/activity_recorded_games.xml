@@ -9,9 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="bottom|center_horizontal"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:textStyle="bold"
         android:text="My Recorded Games" />
 
@@ -21,23 +21,14 @@
         android:layout_weight="1"
         android:gravity="bottom"
         android:layout_marginLeft="20dp"
-        android:text="Title\t\t\t\t\t\t\t\t\t\t\t\tDate" />
+        android:text="Title\t\t\t\t\t\t\t\tDate" />
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <ListView
+        android:id="@+id/listView"
         android:layout_weight="8"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="0dp" >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-            
-            
-            
-            
-        </LinearLayout>
-    </ScrollView>
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,6 +62,7 @@
             android:textStyle="bold"
             android:layout_marginBottom="10dp"
             android:layout_gravity="center_vertical"
+            android:enabled="false"
             android:text="Replay Match" />
 
 </LinearLayout>
