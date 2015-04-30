@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridLayout.LayoutParams;
@@ -22,10 +25,13 @@ public class ChessGame extends Activity {
 	static boolean replayingGame = false;
 	
 	GridLayout grid;
-	ImageView[][] chessboard;
+	ChessboardSquare[][] chessboard;
 	Button undo, ai, draw, resign;
 	TextView turn;
 	Intent intent;
+	
+	boolean pieceSelected = false;
+	Pair<Integer, Integer> currentCoordinate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +47,7 @@ public class ChessGame extends Activity {
 		turn = (TextView) findViewById(R.id.turn);
 		turn.setText("White Turn");
 		
-		chessboard = new ImageView[8][8];
+		chessboard = new ChessboardSquare[8][8];
 		
 		/* FOR TESTING: CURRENTLY WORKS
 		try {
@@ -60,10 +66,12 @@ public class ChessGame extends Activity {
 	}
 	
 	public void initializeBoard() {
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		//LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				ImageView square = (ImageView) inflater.inflate(R.layout.chessboard_square, null);
+				//ImageView square = (ImageView) inflater.inflate(R.layout.chessboard_square, null);
+				ChessboardSquare square = new ChessboardSquare(this, new Pair<Integer, Integer>(7-row, col));
 				if ((row+col) % 2 == 0)
 					square.setBackgroundColor(Color.WHITE);
 				else
@@ -71,7 +79,17 @@ public class ChessGame extends Activity {
 				LayoutParams params = new LayoutParams(GridLayout.spec(row), GridLayout.spec(col));
 				params.width = 40;
 				params.height = 40;
+				params.setGravity(Gravity.CENTER);
 				square.setLayoutParams(params);
+				square.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						ChessboardSquare square = (ChessboardSquare)v;
+						movePiece(square.coordinate);
+					}
+				});
+				
 				grid.addView(square, params);
 				chessboard[7-row][col] = square;
 			}
@@ -108,6 +126,25 @@ public class ChessGame extends Activity {
 		chessboard[7][5].setImageResource(R.drawable.blk_bishop);
 		chessboard[7][6].setImageResource(R.drawable.blk_knight);
 		chessboard[7][7].setImageResource(R.drawable.blk_rook);
+	}
+	
+	public void movePiece(Pair<Integer, Integer> coordinate) {
+		pieceSelected = !pieceSelected;
+		ChessboardSquare square;
+		if (pieceSelected) {
+			square = chessboard[coordinate.first][coordinate.second];
+			square.setBackgroundColor(Color.GREEN);
+			currentCoordinate = coordinate;
+		} else {
+			// if invalid move, make toast, else make appropriate move and change images appropriately using currentCoordinate and coordinate to access the ChessboardSquares
+			square = chessboard[currentCoordinate.first][currentCoordinate.second];
+			if ((currentCoordinate.first + currentCoordinate.second) % 2 == 0)
+				square.setBackgroundColor(Color.BLUE);
+			else
+				square.setBackgroundColor(Color.WHITE);
+		}
+		// if pieceSelected == true and is an invalid move, make toast and deselect piece
+		Log.v("MOVE", coordinate.first + ", " + coordinate.second);
 	}
 	
 	public void writeData() throws Exception {
