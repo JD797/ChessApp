@@ -29,16 +29,20 @@ public class ChessGame extends Activity {
 		draw = (Button) findViewById(R.id.draw);
 		resign = (Button) findViewById(R.id.resign);
 		
+		/* FOR TESTING: CURRENTLY WORKS
 		try {
-			writeData("test");
+			SavedGame savedGame = new SavedGame("test2");
+			SavedGame.savedGames.add(savedGame);
+			SavedGame savedGame2 = new SavedGame("test");
+			SavedGame.savedGames.add(savedGame2);
+			writeData();
 		} catch (Exception e) { }
+		*/ 
 		
 		Log.v("DIRECTORY", getApplicationInfo().dataDir);
 	}
 	
-	public void writeData(String title) throws Exception {
-		SavedGame savedGame = new SavedGame(title);
-		SavedGame.savedGames.add(savedGame);
+	public void writeData() throws Exception {
 		//TODO make sure this works
 		File file = new File("android.resource://com.davis_newman_group18/raw/saved_games");
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));

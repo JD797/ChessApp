@@ -24,7 +24,7 @@ public class SavedGame {
 	}
 	
 	public String toString() {
-		return title + "\t\t\t\t\t\t" + date;
+		return title + " - " + date;
 	}
 	
 	//TODO will need a compareTo thing

@@ -1,5 +1,7 @@
 package com.davis_newman_group18.chess;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ public class RecordedGames extends Activity {
 	Intent intent;
 	
 	SavedGame game;
+	ArrayAdapter<SavedGame> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class RecordedGames extends Activity {
 		replay = (Button) findViewById(R.id.replay);
 		selectedGameTitle = (TextView) findViewById(R.id.selectedGameTitle);
 		
-		ArrayAdapter<SavedGame> adapter = new ArrayAdapter<SavedGame>(this,
+		adapter = new ArrayAdapter<SavedGame>(this,
 	              android.R.layout.simple_list_item_1, android.R.id.text1, SavedGame.savedGames);
 		
 		listView.setAdapter(adapter);		
@@ -57,7 +61,46 @@ public class RecordedGames extends Activity {
 			}
 		});
 		
+		sortByDate.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ArrayList<SavedGame> games = SavedGame.savedGames;
+				for (int i = 1; i < SavedGame.savedGames.size(); i++) {
+					for (int j = i; j > 0; j--) {
+						SavedGame curr = games.get(j);
+						SavedGame prev = games.get(j-1);
+						if (curr.calendar.before(prev.calendar)) {
+							SavedGame tmp = prev;
+							games.set(j-1, curr);
+							games.set(j, tmp);
+						}
+					}
+				}		
+				adapter.notifyDataSetChanged();
+			}
+		});
 		
+		sortByTitle.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ArrayList<SavedGame> games = SavedGame.savedGames;
+				for (int i = 1; i < SavedGame.savedGames.size(); i++) {
+					for (int j = i; j > 0; j--) {
+						SavedGame curr = games.get(j);
+						SavedGame prev = games.get(j-1);
+						if (curr.title.compareTo(prev.title) < 0) {
+							SavedGame tmp = prev;
+							games.set(j-1, curr);
+							games.set(j, tmp);
+						}
+					}
+				}		
+				adapter.notifyDataSetChanged();
+			}
+		});
+			
 	}
 	
 	
