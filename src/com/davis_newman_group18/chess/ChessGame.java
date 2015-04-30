@@ -3,16 +3,14 @@ package com.davis_newman_group18.chess;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -31,7 +29,8 @@ public class ChessGame extends Activity {
 	Intent intent;
 	
 	boolean pieceSelected = false;
-	Pair<Integer, Integer> currentCoordinate;
+	Coordinate currentCoordinate;
+	LinkedList<Coordinate> movesMade;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +46,7 @@ public class ChessGame extends Activity {
 		turn = (TextView) findViewById(R.id.turn);
 		turn.setText("White Turn");
 		
+		movesMade = new LinkedList<Coordinate>();
 		chessboard = new ChessboardSquare[8][8];
 		
 		/* FOR TESTING: CURRENTLY WORKS
@@ -71,7 +71,7 @@ public class ChessGame extends Activity {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				//ImageView square = (ImageView) inflater.inflate(R.layout.chessboard_square, null);
-				ChessboardSquare square = new ChessboardSquare(this, new Pair<Integer, Integer>(7-row, col));
+				ChessboardSquare square = new ChessboardSquare(this, new Coordinate(7-row, col));
 				if ((row+col) % 2 == 0)
 					square.setBackgroundColor(Color.WHITE);
 				else
@@ -128,23 +128,27 @@ public class ChessGame extends Activity {
 		chessboard[7][7].setImageResource(R.drawable.blk_rook);
 	}
 	
-	public void movePiece(Pair<Integer, Integer> coordinate) {
+	public void movePiece(Coordinate coordinate) {
 		pieceSelected = !pieceSelected;
 		ChessboardSquare square;
 		if (pieceSelected) {
-			square = chessboard[coordinate.first][coordinate.second];
+			square = chessboard[coordinate.row][coordinate.col];
 			square.setBackgroundColor(Color.GREEN);
 			currentCoordinate = coordinate;
+			movesMade.add(coordinate);
 		} else {
-			// if invalid move, make toast, else make appropriate move and change images appropriately using currentCoordinate and coordinate to access the ChessboardSquares
-			square = chessboard[currentCoordinate.first][currentCoordinate.second];
-			if ((currentCoordinate.first + currentCoordinate.second) % 2 == 0)
+			
+			// if invalid move, make toast then delete last item in movesMade,
+			// else make appropriate move and change images appropriately using currentCoordinate and coordinate to access the ChessboardSquares
+			// then add coordinate to movesMade
+			
+			square = chessboard[currentCoordinate.row][currentCoordinate.col];
+			if ((currentCoordinate.row + currentCoordinate.col) % 2 == 0)
 				square.setBackgroundColor(Color.BLUE);
 			else
 				square.setBackgroundColor(Color.WHITE);
 		}
-		// if pieceSelected == true and is an invalid move, make toast and deselect piece
-		Log.v("MOVE", coordinate.first + ", " + coordinate.second);
+		Log.v("MOVE", coordinate.row + ", " + coordinate.col);
 	}
 	
 	public void writeData() throws Exception {
@@ -154,4 +158,5 @@ public class ChessGame extends Activity {
 		oos.writeObject(SavedGame.savedGames);
 		oos.close();
 	}
+	
 }

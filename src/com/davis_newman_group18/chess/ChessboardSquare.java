@@ -6,9 +6,9 @@ import android.widget.ImageView;
 
 public class ChessboardSquare extends ImageView {
 	
-	Pair<Integer, Integer> coordinate;
+	Coordinate coordinate;
 
-	public ChessboardSquare(Context context, Pair<Integer, Integer> coordinate) {
+	public ChessboardSquare(Context context, Coordinate coordinate) {
 		super(context);
 		this.coordinate = coordinate;
 	}

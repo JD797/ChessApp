@@ -14,7 +14,7 @@ public class SavedGame {
 	String title;
 	String date;
 	Calendar calendar;
-	LinkedList<String> movesMade; // Will probably be changed from String
+	LinkedList<Coordinate> movesMade; // Will probably be changed from String
 	
 	public SavedGame(String title) {
 		this.title = title;
