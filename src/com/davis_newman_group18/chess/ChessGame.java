@@ -5,16 +5,26 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.GridLayout.LayoutParams;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ChessGame extends Activity {
 	
 	static boolean replayingGame = false;
 	
+	GridLayout grid;
+	ImageView[][] chessboard;
 	Button undo, ai, draw, resign;
+	TextView turn;
 	Intent intent;
 
 	@Override
@@ -23,11 +33,15 @@ public class ChessGame extends Activity {
 		setContentView(R.layout.activity_chess_game);
 		
 		intent = new Intent(this, MainActivity.class);
-		
+		grid = (GridLayout) findViewById(R.id.gridLayout);
 		undo = (Button) findViewById(R.id.undo);
 		ai = (Button) findViewById(R.id.ai);
 		draw = (Button) findViewById(R.id.draw);
 		resign = (Button) findViewById(R.id.resign);
+		turn = (TextView) findViewById(R.id.turn);
+		turn.setText("White Turn");
+		
+		chessboard = new ImageView[8][8];
 		
 		/* FOR TESTING: CURRENTLY WORKS
 		try {
@@ -37,9 +51,63 @@ public class ChessGame extends Activity {
 			SavedGame.savedGames.add(savedGame2);
 			writeData();
 		} catch (Exception e) { }
-		*/ 
 		
 		Log.v("DIRECTORY", getApplicationInfo().dataDir);
+		*/ 
+		
+		initializeBoard();	
+		
+	}
+	
+	public void initializeBoard() {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				ImageView square = (ImageView) inflater.inflate(R.layout.chessboard_square, null);
+				if ((row+col) % 2 == 0)
+					square.setBackgroundColor(Color.WHITE);
+				else
+					square.setBackgroundColor(Color.BLUE);
+				LayoutParams params = new LayoutParams(GridLayout.spec(row), GridLayout.spec(col));
+				params.width = 40;
+				params.height = 40;
+				square.setLayoutParams(params);
+				grid.addView(square, params);
+				chessboard[7-row][col] = square;
+			}
+		}
+		
+		// Set row 0 pieces
+		chessboard[0][0].setImageResource(R.drawable.wht_rook);
+		chessboard[0][1].setImageResource(R.drawable.wht_knight);
+		chessboard[0][2].setImageResource(R.drawable.wht_bishop);
+		chessboard[0][3].setImageResource(R.drawable.wht_queen);
+		chessboard[0][4].setImageResource(R.drawable.wht_king);
+		chessboard[0][5].setImageResource(R.drawable.wht_bishop);
+		chessboard[0][6].setImageResource(R.drawable.wht_knight);
+		chessboard[0][7].setImageResource(R.drawable.wht_rook);
+		
+		// Set row 1 pawns
+		for (int col = 0; col < 8; col++) {
+			ImageView square = chessboard[1][col];
+			square.setImageResource(R.drawable.wht_pawn);
+		}
+		
+		// Set row 6 pawns
+		for (int col = 0; col < 8; col++) {
+			ImageView square = chessboard[6][col];
+			square.setImageResource(R.drawable.blk_pawn);
+		}
+		
+		// Set row 7 pieces
+		chessboard[7][0].setImageResource(R.drawable.blk_rook);
+		chessboard[7][1].setImageResource(R.drawable.blk_knight);
+		chessboard[7][2].setImageResource(R.drawable.blk_bishop);
+		chessboard[7][3].setImageResource(R.drawable.blk_queen);
+		chessboard[7][4].setImageResource(R.drawable.blk_king);
+		chessboard[7][5].setImageResource(R.drawable.blk_bishop);
+		chessboard[7][6].setImageResource(R.drawable.blk_knight);
+		chessboard[7][7].setImageResource(R.drawable.blk_rook);
 	}
 	
 	public void writeData() throws Exception {

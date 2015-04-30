@@ -27,33 +27,26 @@ public final class R {
         public static final int wht_rook=0x7f02000d;
     }
     public static final class id {
-        public static final int ai=0x7f07000a;
-        public static final int draw=0x7f07000b;
+        public static final int ai=0x7f070002;
+        public static final int draw=0x7f070003;
         public static final int gridLayout=0x7f070000;
-        public static final int listView=0x7f070011;
-        public static final int piece1=0x7f070001;
-        public static final int piece2=0x7f070002;
-        public static final int piece3=0x7f070003;
-        public static final int piece4=0x7f070004;
-        public static final int piece5=0x7f070005;
-        public static final int piece6=0x7f070006;
-        public static final int piece7=0x7f070007;
-        public static final int piece8=0x7f070008;
-        public static final int playButton=0x7f07000f;
-        public static final int playbackButton=0x7f070010;
-        public static final int replay=0x7f070015;
-        public static final int resign=0x7f07000c;
-        public static final int selectedGameTitle=0x7f070014;
-        public static final int sortByDate=0x7f070012;
-        public static final int sortByTitle=0x7f070013;
-        public static final int title=0x7f07000e;
-        public static final int turn=0x7f07000d;
-        public static final int undo=0x7f070009;
+        public static final int listView=0x7f070009;
+        public static final int playButton=0x7f070007;
+        public static final int playbackButton=0x7f070008;
+        public static final int replay=0x7f07000d;
+        public static final int resign=0x7f070004;
+        public static final int selectedGameTitle=0x7f07000c;
+        public static final int sortByDate=0x7f07000a;
+        public static final int sortByTitle=0x7f07000b;
+        public static final int title=0x7f070006;
+        public static final int turn=0x7f070005;
+        public static final int undo=0x7f070001;
     }
     public static final class layout {
         public static final int activity_chess_game=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_recorded_games=0x7f030002;
+        public static final int chessboard_square=0x7f030003;
     }
     public static final class raw {
         public static final int saved_games=0x7f040000;
@@ -61,10 +54,16 @@ public final class R {
     public static final class string {
         public static final int ai=0x7f050007;
         public static final int app_name=0x7f050000;
+        public static final int chessPiece=0x7f05000f;
         public static final int draw=0x7f050008;
         public static final int play=0x7f050002;
         public static final int playback=0x7f050003;
+        public static final int recordsHeader=0x7f05000d;
+        public static final int replay=0x7f05000e;
         public static final int resign=0x7f050009;
+        public static final int selectGame=0x7f05000c;
+        public static final int sortByDate=0x7f05000a;
+        public static final int sortByTitle=0x7f05000b;
         public static final int title=0x7f050001;
         public static final int title_activity_chess_game=0x7f050004;
         public static final int title_activity_recorded_games=0x7f050005;
