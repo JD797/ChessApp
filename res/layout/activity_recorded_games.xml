@@ -9,19 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:gravity="bottom|center_horizontal"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:text="My Recorded Games" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
         android:gravity="bottom"
-        android:layout_marginLeft="20dp"
-        android:text="Title\t\t\t\t\t\t\t\tDate" />
+        android:layout_marginLeft="5dp"
+        android:text="Title\t\t\t\t\t\tDate" />
 
     <ListView
         android:id="@+id/listView"
@@ -52,6 +42,17 @@
             android:text="Sort By Title" />
 
     </LinearLayout>
+    
+    <TextView
+        android:id="@+id/selectedGameTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom|center_horizontal"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:text="(Select a Game)" />
     
     <Button
             android:id="@+id/replay"

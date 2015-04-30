@@ -29,6 +29,10 @@ public class ChessGame extends Activity {
 		draw = (Button) findViewById(R.id.draw);
 		resign = (Button) findViewById(R.id.resign);
 		
+		try {
+			writeData("test");
+		} catch (Exception e) { }
+		
 		Log.v("DIRECTORY", getApplicationInfo().dataDir);
 	}
 	

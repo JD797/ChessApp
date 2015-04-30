@@ -1,10 +1,7 @@
 package com.davis_newman_group18.chess;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;

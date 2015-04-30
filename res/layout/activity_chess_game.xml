@@ -6,16 +6,84 @@
     android:weightSum="100"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <ImageView
-        android:id="@+id/chessBoard"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="76"
-        android:src="@drawable/chessboard" />
+    <GridLayout
+	    android:id="@+id/gridLayout"
+	    android:background="@drawable/chessboard"
+	    android:columnCount="8"
+	    android:rowCount="8"
+	    android:layout_weight="70"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp" >
+	    
+        <ImageView
+		     android:id="@+id/piece1"
+		     android:layout_column="0"
+		     android:layout_row="0"
+		     android:layout_width="35dp"
+		     android:layout_height="35dp"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece2"
+		     android:layout_column="1"
+		     android:layout_row="0"
+		     android:layout_width="35dp"
+		     android:layout_height="35dp"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece3"
+		     android:layout_column="2"
+		     android:layout_row="0"
+		     android:layout_width="35dp"
+		     android:layout_height="35dp"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece4"
+		     android:layout_column="3"
+		     android:layout_row="0"
+		     android:layout_width="35dp"
+		     android:layout_height="35dp"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece5"
+		     android:layout_column="4"
+		     android:layout_row="0"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece6"
+		     android:layout_column="5"
+		     android:layout_row="0"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece7"
+		     android:layout_column="6"
+		     android:layout_row="0"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />
+        
+        <ImageView
+		     android:id="@+id/piece8"
+		     android:layout_column="7"
+		     android:layout_row="0"
+		     android:layout_gravity="center"
+		     android:src="@drawable/ic_launcher" />"
+ 
+	</GridLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_weight="14"
+        android:layout_weight="15"
         android:layout_marginTop="10dp"
         android:layout_height="0dp" >
 
@@ -58,7 +126,7 @@
         android:id="@+id/turn"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_weight="15"
         android:textSize="30dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
