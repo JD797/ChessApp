@@ -4,92 +4,72 @@ package com.davis_newman_group18.chess;
 public class ChessBoard {
 	
 	static char[] pieceTypes = {'B', 'R', 'Q', 'p', 'N', 'K'};
-	static String[][] boardColors = { {"##", "  ", "##", "  ", "##", "  ", "##", "  "}, {"  ", "##", "  ", "##", "  ", "##", "  ", "##"},
-			{"##", "  ", "##", "  ", "##", "  ", "##", "  "}, {"  ", "##", "  ", "##", "  ", "##", "  ", "##"},
-			{"##", "  ", "##", "  ", "##", "  ", "##", "  "}, {"  ", "##", "  ", "##", "  ", "##", "  ", "##"},
-			{"##", "  ", "##", "  ", "##", "  ", "##", "  "}, {"  ", "##", "  ", "##", "  ", "##", "  ", "##"} };
 	
-	static ChessPiece[][] chessBoard;
-	static ChessPiece wKing;
-	static ChessPiece bKing;
-	static ChessPiece enPassantPawn = null;
+	ChessPiece[][] chessBoard;
+	ChessPiece wKing;
+	ChessPiece bKing;
+	ChessPiece enPassantPawn = null;
 	
+	public ChessBoard() {
+		setupBoard();
+	}
 
-	public static void setupBoard() {
+	public void setupBoard() {
 						
 		chessBoard = new ChessPiece[8][8];
 		
-		chessBoard[0][0] = new Rook(0, 0, 'w');
-		chessBoard[0][1] = new Knight(0, 1, 'w');
-		chessBoard[0][2] = new Bishop(0, 2, 'w');
-		chessBoard[0][3] = new Queen(0, 3, 'w');
-		chessBoard[0][4] = new King(0, 4, 'w');
-		chessBoard[0][5] = new Bishop(0, 5, 'w');
-		chessBoard[0][6] = new Knight(0, 6, 'w');
-		chessBoard[0][7] = new Rook(0, 7, 'w');
+		chessBoard[0][0] = new Rook(0, 0, 'w', this);
+		chessBoard[0][1] = new Knight(0, 1, 'w', this);
+		chessBoard[0][2] = new Bishop(0, 2, 'w', this);
+		chessBoard[0][3] = new Queen(0, 3, 'w', this);
+		chessBoard[0][4] = new King(0, 4, 'w', this);
+		chessBoard[0][5] = new Bishop(0, 5, 'w', this);
+		chessBoard[0][6] = new Knight(0, 6, 'w', this);
+		chessBoard[0][7] = new Rook(0, 7, 'w', this);
 		
 		for (int file = 0; file < 8; file ++) {
-			chessBoard[1][file] = new Pawn(1, file, 'w');
+			chessBoard[1][file] = new Pawn(1, file, 'w', this);
 		}
 		
 		for (int file = 0; file < 8; file ++) {
-			chessBoard[6][file] = new Pawn(6, file, 'b');
+			chessBoard[6][file] = new Pawn(6, file, 'b', this);
 		}
 		
-		chessBoard[7][0] = new Rook(7, 0, 'b');
-		chessBoard[7][1] = new Knight(7, 1, 'b');
-		chessBoard[7][2] = new Bishop(7, 2, 'b');
-		chessBoard[7][3] = new Queen(7, 3, 'b');
-		chessBoard[7][4] = new King(7, 4, 'b');
-		chessBoard[7][5] = new Bishop(7, 5, 'b');
-		chessBoard[7][6] = new Knight(7, 6, 'b');
-		chessBoard[7][7] = new Rook(7, 7, 'b');
+		chessBoard[7][0] = new Rook(7, 0, 'b', this);
+		chessBoard[7][1] = new Knight(7, 1, 'b', this);
+		chessBoard[7][2] = new Bishop(7, 2, 'b', this);
+		chessBoard[7][3] = new Queen(7, 3, 'b', this);
+		chessBoard[7][4] = new King(7, 4, 'b', this);
+		chessBoard[7][5] = new Bishop(7, 5, 'b', this);
+		chessBoard[7][6] = new Knight(7, 6, 'b', this);
+		chessBoard[7][7] = new Rook(7, 7, 'b', this);
 		
 		wKing = chessBoard[0][4];
 		bKing = chessBoard[7][4];
 	}
 	
 	
-	public static ChessPiece[][] getBoard() {
+	public ChessPiece[][] getBoard() {
 		return chessBoard;
 	}
 	
 	
-	public static ChessPiece getPiece(int rank, int file) {
+	public ChessPiece getPiece(int rank, int file) {
 		return chessBoard[rank][file];
 	}
 	
-	public static void printBoard() {
-		
-		for (int rank = 7; rank >= 0; rank--) {
-			for (int file = 0; file < 8; file++) {
-				ChessPiece chessPiece = chessBoard[rank][file];
-				if (chessPiece == null)
-					System.out.print(boardColors[rank][file]);
-				else
-					System.out.print("" + chessPiece.color + chessPiece.getPieceType());
-				System.out.print(" ");
-			}
-			System.out.println(rank+1);
-		}
-		
-		System.out.println(" a  b  c  d  e  f  g  h");
-		System.out.println();
-	}
-	
-	
-	public static void promote(int rank, int file, char type) {
+	public void promote(int rank, int file, char type) {
 		ChessPiece pawn = chessBoard[rank][file];
 		ChessPiece promotedPiece;
 		
 		if (type == 'Q')
-			promotedPiece = new Queen(rank, file, pawn.color);
+			promotedPiece = new Queen(rank, file, pawn.color, this);
 		else if (type == 'B')
-			promotedPiece = new Bishop(rank, file, pawn.color);
+			promotedPiece = new Bishop(rank, file, pawn.color, this);
 		else if (type == 'N')
-			promotedPiece = new Knight(rank, file, pawn.color);
+			promotedPiece = new Knight(rank, file, pawn.color, this);
 		else
-			promotedPiece = new Rook(rank, file, pawn.color);
+			promotedPiece = new Rook(rank, file, pawn.color, this);
 		
 		promotedPiece.rank = pawn.rank;
 		promotedPiece.file = pawn.file;
@@ -98,7 +78,7 @@ public class ChessBoard {
 	
 	
 	// Checks if a player puts themselves in check with a move, which is illegal
-	public static boolean putsSelfInCheck(ChessPiece movedPiece, int toRank, int toFile) {
+	public boolean putsSelfInCheck(ChessPiece movedPiece, int toRank, int toFile) {
 		
 		boolean kingInCheck = false;
 		
@@ -143,7 +123,7 @@ public class ChessBoard {
 	}
 	
 	// Checks whether the player of the given color is in check or not
-	public static boolean playerIsInCheck(char color) {
+	public boolean playerIsInCheck(char color) {
 		int kingRank, kingFile;
 		if (color == 'w') {
 			kingRank = wKing.rank;
@@ -168,7 +148,7 @@ public class ChessBoard {
 	}
 	
 	// Checks whether the player of the given color has any valid move options or not
-	public static boolean hasValidMove(char color) {
+	public boolean hasValidMove(char color) {
 		for (int rank = 0; rank < 8; rank++) {
 			for (int file = 0; file < 8; file++) {
 				ChessPiece piece = chessBoard[rank][file];

@@ -3,8 +3,8 @@ package com.davis_newman_group18.chess;
 // Jason
 public class Pawn extends ChessPiece {
 	
-	public Pawn(int rank, int file, char color) {
-		super(rank, file, color);
+	public Pawn(int rank, int file, char color, ChessBoard game) {
+		super(rank, file, color, game);
 	}
 
 	@Override
@@ -14,7 +14,7 @@ public class Pawn extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(int toRank, int toFile) {
-		
+		ChessPiece[][] board = game.getBoard();
 		if(rank == toRank && file == toFile) return false;
 		ChessPiece piece;
 		piece = board[toRank][toFile];
@@ -58,7 +58,7 @@ public class Pawn extends ChessPiece {
 			
 			if (board[toRank][toFile] == null) {
 				ChessPiece adjacentPiece = board[rank][toFile];
-				if (adjacentPiece == null || adjacentPiece.getPieceType() != 'p' || adjacentPiece != ChessBoard.enPassantPawn)
+				if (adjacentPiece == null || adjacentPiece.getPieceType() != 'p' || adjacentPiece != game.enPassantPawn)
 					return false;
 				
 				board[rank][toFile] = null;
@@ -66,19 +66,20 @@ public class Pawn extends ChessPiece {
 			
 		}
 		
-		if (ChessBoard.putsSelfInCheck(this, toRank, toFile)) {
+		if (game.putsSelfInCheck(this, toRank, toFile)) {
 			return false;
 		}
 		
 		if (enPassant) {
-			ChessBoard.enPassantPawn = this;
-			Chess.enPassantCounter = 0;
+			game.enPassantPawn = this;
+			ChessGame.enPassantCounter = 0;
 		}
 		return true;
 	}
 	
 
 	public void move(int toRank, int toFile, char promoteType) throws Exception {
+		ChessPiece[][] board = game.getBoard();
 		if ((toRank == 7 && color == 'w') || (toRank == 0 && color == 'b')) {
 			if (isValidMove(toRank, toFile)) {
 				board[toRank][toFile] = board[rank][file];
@@ -86,7 +87,7 @@ public class Pawn extends ChessPiece {
 				rank = toRank;
 				file = toFile;
 				numMovesMade++;
-				ChessBoard.promote(toRank, toFile, 'Q');
+				game.promote(toRank, toFile, 'Q');
 			} else {
 				throw new Exception();
 			}
@@ -98,6 +99,7 @@ public class Pawn extends ChessPiece {
 	
 	@Override
 	public void move(int toRank, int toFile) throws Exception {
+		ChessPiece[][] board = game.getBoard();
 		if (isValidMove(toRank, toFile)) {
 			board[toRank][toFile] = board[rank][file];
 			board[rank][file] = null;
@@ -105,7 +107,7 @@ public class Pawn extends ChessPiece {
 			file = toFile;
 			numMovesMade++;
 			if ((toRank == 7 && color == 'w') || (toRank == 0 && color == 'b'))
-				ChessBoard.promote(toRank, toFile, 'Q');
+				game.promote(toRank, toFile, 'Q');
 		} else {
 			throw new Exception();
 		}
@@ -113,7 +115,7 @@ public class Pawn extends ChessPiece {
 	
 	
 	public void promote(char type) {
-		ChessBoard.promote(rank, file, type);
+		game.promote(rank, file, type);
 	}
 
 }

@@ -6,31 +6,32 @@
     android:weightSum="100"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <ImageView
-        android:id="@+id/chessBoard"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="76"
-        android:src="@drawable/chessboard" />
+    <GridLayout
+	    android:id="@+id/gridLayout"
+	    android:columnCount="8"
+	    android:rowCount="8"
+	    android:layout_weight="74"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp" >
+ 
+	</GridLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_weight="14"
-        android:layout_marginTop="10dp"
+        android:layout_weight="13"
         android:layout_height="0dp" >
 
         <Button
             android:id="@+id/undo"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
             android:textStyle="bold"
             android:text="@string/undo" />
 
         <Button
             android:id="@+id/ai"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textStyle="bold"
@@ -38,7 +39,7 @@
 
         <Button
             android:id="@+id/draw"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textStyle="bold"
@@ -46,7 +47,7 @@
 
         <Button
             android:id="@+id/resign"
-            android:layout_width="75dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textStyle="bold"
@@ -58,12 +59,11 @@
         android:id="@+id/turn"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_weight="13"
         android:textSize="30dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:gravity="center"
-        android:background="@android:color/darker_gray"
-        android:text="White Turn" />
+        android:background="@android:color/holo_blue_dark" />
 
 </LinearLayout>

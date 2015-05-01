@@ -11,5 +11,10 @@
     <string name="ai">AI</string>
     <string name="draw">Draw</string>
     <string name="resign">Resign</string>
+    <string name="sortByDate">Sort by Date</string>
+    <string name="sortByTitle">Sort by Title</string>
+    <string name="recordsHeader">Title - Date</string>
+    <string name="replay">Replay Match</string>
+    <string name="chessPiece">Chess Piece</string>
 
 </resources>
