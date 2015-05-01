@@ -156,6 +156,12 @@ public class ChessGame extends Activity {
 			try {		
 				ChessPiece piece = chessboard[fromCoordinate.row][fromCoordinate.col];
 				piece.move(toCoordinate.row, toCoordinate.col);
+				
+				if (!replayingGame) {
+					movesMade.add(fromCoordinate);
+					movesMade.add(toCoordinate);
+				}
+				
 				if (!whiteTurn) {
 					if (board.playerIsInCheck('w')) {
 						if (!board.hasValidMove('w')) {
@@ -190,10 +196,6 @@ public class ChessGame extends Activity {
 				}
 				
 				updateBoard();
-				if (!replayingGame) {
-					movesMade.add(fromCoordinate);
-					movesMade.add(toCoordinate);
-				}
 								
 				whiteTurn = !whiteTurn;
 				if (whiteTurn) {
