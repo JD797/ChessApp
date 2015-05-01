@@ -3,7 +3,9 @@ package com.davis_newman_group18.chess;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,6 +37,7 @@ public class ChessGame extends Activity {
 	Coordinate fromCoordinate;
 	Coordinate toCoordinate;
 	LinkedList<Coordinate> movesMade;
+	ListIterator<Coordinate> iterator;
 	
 	boolean drawProposed = false;
 	boolean validPlayMade = false;
@@ -60,25 +63,55 @@ public class ChessGame extends Activity {
 		movesMade = new LinkedList<Coordinate>();
 		chessboardDisplay = new ChessboardSquare[8][8];
 		
-		/* FOR TESTING: CURRENTLY WORKS
-		try {
-			SavedGame savedGame = new SavedGame("test2");
-			SavedGame.savedGames.add(savedGame);
-			SavedGame savedGame2 = new SavedGame("test");
-			SavedGame.savedGames.add(savedGame2);
-			writeData();
-		} catch (Exception e) { }
-		
-		Log.v("DIRECTORY", getApplicationInfo().dataDir);
-		*/ 
-		
-		resign.setOnClickListener(new View.OnClickListener() {
+		if (replayingGame) {
+			undo.setVisibility(View.INVISIBLE);
+			resign.setVisibility(View.INVISIBLE);
+			ai.setText("Next");
+			draw.setText("Exit");
+			movesMade = SavedGame.game.movesMade;
+			iterator = movesMade.listIterator();
 			
-			@Override
-			public void onClick(View v) {
-				endGame();
-			}
-		});
+			ai.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (iterator.hasNext())
+						movePiece(iterator.next());
+					if (iterator.hasNext())
+						movePiece(iterator.next());
+					
+					if (!iterator.hasNext()) {
+						ai.setEnabled(false);
+					}
+				}
+			});
+			
+			draw.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					startActivity(intent);
+					finish();
+				}
+			});
+			
+		} else {
+			
+			//TODO need to do the undo, ai and draw buttons
+			
+			resign.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (whiteTurn)
+						Toast.makeText(getApplicationContext(), "White has resigned! Black wins!", Toast.LENGTH_LONG).show();
+					else
+						Toast.makeText(getApplicationContext(), "Black has resigned! White wins!", Toast.LENGTH_LONG).show();
+					endGame();
+				}
+			});
+		
+		}
 		
 		initializeBoard();
 		startGame();
@@ -86,14 +119,13 @@ public class ChessGame extends Activity {
 	}
 	
 	public void startGame() {
-		boolean whiteTurn = true;
 		board = new ChessBoard();
 		chessboard = board.getBoard();
 	}
 	
 	public void movePiece(Coordinate coordinate) {
 		
-		//TODO need to do the undo, ai and draw buttons buttons
+		
 		ChessboardSquare square;
 		
 		if (!pieceSelected) {
@@ -121,9 +153,7 @@ public class ChessGame extends Activity {
 				return;
 			}
 			
-			// do move here
-			try {
-				
+			try {		
 				ChessPiece piece = chessboard[fromCoordinate.row][fromCoordinate.col];
 				piece.move(toCoordinate.row, toCoordinate.col);
 				if (!whiteTurn) {
@@ -131,9 +161,8 @@ public class ChessGame extends Activity {
 						if (!board.hasValidMove('w')) {
 							Toast.makeText(this, "Checkmate! Black wins!", Toast.LENGTH_LONG).show();
 							endGame();
-						} else {
+						} else
 							Toast.makeText(this, "Check", Toast.LENGTH_SHORT).show();
-						}
 					} else {
 						if (!board.hasValidMove('w')) {
 							Toast.makeText(this, "Stalemate!", Toast.LENGTH_LONG).show();
@@ -145,9 +174,8 @@ public class ChessGame extends Activity {
 						if (!board.hasValidMove('b')) {
 							Toast.makeText(this, "Checkmate! White wins!", Toast.LENGTH_LONG).show();
 							endGame();
-						} else {
+						} else
 							Toast.makeText(this, "Check", Toast.LENGTH_SHORT).show();;
-						}
 					} else {
 						if (!board.hasValidMove('b')) {
 							Toast.makeText(this, "Stalemate!", Toast.LENGTH_LONG).show();
@@ -161,22 +189,12 @@ public class ChessGame extends Activity {
 					board.enPassantPawn = null;
 				}
 				
-				/* TODO promotion
-				 * char promoteType = move.charAt(6);
-					try {
-						((Pawn)board.getPiece(fromRank, fromFile)).move(toRank, toFile, promoteType);
-					} catch (Exception e) {
-						printErrorMessage();
-						return;
-					}
-				 */
-				
 				updateBoard();
-				movesMade.add(fromCoordinate);
-				movesMade.add(toCoordinate);
-				
-				// optional - check for checkmate/stalemate here
-				
+				if (!replayingGame) {
+					movesMade.add(fromCoordinate);
+					movesMade.add(toCoordinate);
+				}
+								
 				whiteTurn = !whiteTurn;
 				if (whiteTurn) {
 					turn.setTextColor(Color.WHITE);
@@ -186,19 +204,18 @@ public class ChessGame extends Activity {
 					turn.setText("Black Turn");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 				Toast.makeText(this, "Invalid Move", Toast.LENGTH_SHORT).show();
 			}
 			
 			fromCoordinate = null;
 			toCoordinate = null;
 		}
-		// for testing
-		Log.v("MOVE", coordinate.row + ", " + coordinate.col);
+		
 	}
 	
 	public void endGame() {
-		// TODO ask user if they want to save game, then go back to main activity
+		// TODO if not replayingGame, ask user if they want to save game (get save title if they do), then go back to main activity
+		// below savedGame is a test
 		SavedGame savedGame = new SavedGame("test", movesMade);
 		SavedGame.savedGames.add(savedGame);
 		try {
@@ -316,8 +333,7 @@ public class ChessGame extends Activity {
 	}
 	
 	public void writeData() throws Exception {
-		//TODO this doesnt work. When trying to read, says file is empty
-		File file = new File(this.getFilesDir(), "saved_games");
+		//File file = new File(this.getFilesDir(), "saved_games");
 		ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saved_game", Context.MODE_PRIVATE));
 		oos.writeObject(SavedGame.savedGames);
 		oos.close();

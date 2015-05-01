@@ -123,13 +123,11 @@ public class RecordedGames extends Activity {
 		try {
 			ois = new ObjectInputStream(openFileInput("saved_game"));
 			ArrayList<SavedGame> savedGames = (ArrayList<SavedGame>)ois.readObject();
-			// TODO is savedGames null here if the file is blank? need to test
 			if (savedGames == null)	
 				SavedGame.savedGames = new ArrayList<SavedGame>();
 			else
 				SavedGame.savedGames = savedGames;	
 		} catch (Exception e) {
-			e.printStackTrace();
 			SavedGame.savedGames = new ArrayList<SavedGame>();
 		}
 	}
