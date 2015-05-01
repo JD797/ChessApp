@@ -5,8 +5,8 @@ public class King extends ChessPiece {
 	
 	boolean castling;
 	
-	public King(int rank, int file, char color) {
-		super(rank, file, color);
+	public King(int rank, int file, char color, ChessBoard game) {
+		super(rank, file, color, game);
 		castling = false;
 	}
 
@@ -17,6 +17,7 @@ public class King extends ChessPiece {
 	
 	@Override
 	public void move (int toRank, int toFile) throws Exception {
+		ChessPiece[][] board = game.getBoard();
 		if (isValidMove(toRank, toFile)) {
 			board[toRank][toFile] = board[rank][file];
 			board[rank][file] = null;
@@ -46,7 +47,7 @@ public class King extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(int toRank, int toFile) {
-	
+		ChessPiece[][] board = game.getBoard();
 		if(rank == toRank && file == toFile) return false;
 		ChessPiece piece;
 		piece = board[toRank][toFile];
@@ -82,7 +83,7 @@ public class King extends ChessPiece {
 			}
 		}	
 		
-		if (ChessBoard.putsSelfInCheck(this, toRank, toFile)) {
+		if (game.putsSelfInCheck(this, toRank, toFile)) {
 			return false;
 		}
 		

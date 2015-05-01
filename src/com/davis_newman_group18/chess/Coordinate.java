@@ -9,5 +9,11 @@ public class Coordinate {
 		this.row = row;
 		this.col = col;
 	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof Coordinate)) return false;
+		Coordinate coordinate = (Coordinate)o;
+		return (coordinate.row == row && coordinate.col == col);
+	}
 
 }

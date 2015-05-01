@@ -8,10 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,7 +44,7 @@ public class RecordedGames extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				SavedGame.game = (SavedGame)listView.getItemAtPosition(position);
+				SavedGame.game = (SavedGame) listView.getItemAtPosition(position);
 				replay.setEnabled(true);
 				selectedGameTitle.setText(SavedGame.game.title);
 			}	

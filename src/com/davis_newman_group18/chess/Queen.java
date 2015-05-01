@@ -3,8 +3,8 @@ package com.davis_newman_group18.chess;
 // Michael
 public class Queen extends ChessPiece {
 	
-	public Queen(int rank, int file, char color) {
-		super(rank, file, color);
+	public Queen(int rank, int file, char color, ChessBoard game) {
+		super(rank, file, color, game);
 	}
 
 	@Override
@@ -14,7 +14,7 @@ public class Queen extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(int toRank, int toFile) {
-		
+		ChessPiece[][] board = game.getBoard();
 		if(rank == toRank && file == toFile) return false;
 		ChessPiece piece;
 		piece = board[toRank][toFile];
@@ -62,7 +62,7 @@ public class Queen extends ChessPiece {
 			return false;
 		}
 		
-		if (ChessBoard.putsSelfInCheck(this, toRank, toFile)) {
+		if (game.putsSelfInCheck(this, toRank, toFile)) {
 			return false;
 		}
 
