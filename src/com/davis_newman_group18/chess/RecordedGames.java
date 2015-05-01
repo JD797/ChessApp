@@ -1,5 +1,9 @@
 package com.davis_newman_group18.chess;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -34,6 +38,18 @@ public class RecordedGames extends Activity {
 		sortByTitle = (Button) findViewById(R.id.sortByTitle);
 		replay = (Button) findViewById(R.id.replay);
 		selectedGameTitle = (TextView) findViewById(R.id.selectedGameTitle);
+		
+		readData();
+		
+		if (SavedGame.savedGames.size() == 0) {
+			selectedGameTitle.setText("No games saved");
+			sortByDate.setEnabled(false);
+			sortByTitle.setEnabled(false);
+		} else {
+			selectedGameTitle.setText("Select a game");
+			sortByDate.setEnabled(true);
+			sortByTitle.setEnabled(true);
+		}
 		
 		adapter = new ArrayAdapter<SavedGame>(this,
 	              android.R.layout.simple_list_item_1, android.R.id.text1, SavedGame.savedGames);
@@ -99,6 +115,23 @@ public class RecordedGames extends Activity {
 			}
 		});
 			
+	}
+	
+	public void readData() {
+		
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(openFileInput("saved_game"));
+			ArrayList<SavedGame> savedGames = (ArrayList<SavedGame>)ois.readObject();
+			// TODO is savedGames null here if the file is blank? need to test
+			if (savedGames == null)	
+				SavedGame.savedGames = new ArrayList<SavedGame>();
+			else
+				SavedGame.savedGames = savedGames;	
+		} catch (Exception e) {
+			e.printStackTrace();
+			SavedGame.savedGames = new ArrayList<SavedGame>();
+		}
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -128,28 +129,28 @@ public class ChessGame extends Activity {
 				if (!whiteTurn) {
 					if (board.playerIsInCheck('w')) {
 						if (!board.hasValidMove('w')) {
-							Toast.makeText(this, "Checkmate! Black wins!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(this, "Checkmate! Black wins!", Toast.LENGTH_LONG).show();
 							endGame();
 						} else {
 							Toast.makeText(this, "Check", Toast.LENGTH_SHORT).show();
 						}
 					} else {
 						if (!board.hasValidMove('w')) {
-							Toast.makeText(this, "Stalemate!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(this, "Stalemate!", Toast.LENGTH_LONG).show();
 							endGame();
 						}
 					}
 				} else {
 					if (board.playerIsInCheck('b')) {
 						if (!board.hasValidMove('b')) {
-							Toast.makeText(this, "Checkmate! White wins!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(this, "Checkmate! White wins!", Toast.LENGTH_LONG).show();
 							endGame();
 						} else {
 							Toast.makeText(this, "Check", Toast.LENGTH_SHORT).show();;
 						}
 					} else {
 						if (!board.hasValidMove('b')) {
-							Toast.makeText(this, "Stalemate!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(this, "Stalemate!", Toast.LENGTH_LONG).show();
 							endGame();
 						}
 					}
@@ -198,6 +199,13 @@ public class ChessGame extends Activity {
 	
 	public void endGame() {
 		// TODO ask user if they want to save game, then go back to main activity
+		SavedGame savedGame = new SavedGame("test", movesMade);
+		SavedGame.savedGames.add(savedGame);
+		try {
+			writeData();
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}
 		startActivity(intent);
 		finish();
 	}
@@ -308,9 +316,9 @@ public class ChessGame extends Activity {
 	}
 	
 	public void writeData() throws Exception {
-		//TODO make sure this works
-		File file = new File("android.resource://com.davis_newman_group18/raw/saved_games");
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+		//TODO this doesnt work. When trying to read, says file is empty
+		File file = new File(this.getFilesDir(), "saved_games");
+		ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saved_game", Context.MODE_PRIVATE));
 		oos.writeObject(SavedGame.savedGames);
 		oos.close();
 	}

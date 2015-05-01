@@ -1,5 +1,6 @@
 package com.davis_newman_group18.chess;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MainActivity extends Activity {
 		recordedGames = new Intent(this, RecordedGames.class);
 		
 		readData();
-		
+				
 		playButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -51,12 +52,10 @@ public class MainActivity extends Activity {
 	
 	public void readData() {
 		
-		InputStream is;
 		ObjectInputStream ois;
-		is = getResources().openRawResource(R.raw.saved_games);
-		
+		String path = "android.resource://com.davis_newman_group18/saved_games";
 		try {
-			ois = new ObjectInputStream(is);
+			ois = new ObjectInputStream(new FileInputStream(path));
 			ArrayList<SavedGame> savedGames = (ArrayList<SavedGame>)ois.readObject();
 			// TODO is savedGames null here if the file is blank? need to test
 			if (savedGames == null)	
@@ -67,5 +66,6 @@ public class MainActivity extends Activity {
 			SavedGame.savedGames = new ArrayList<SavedGame>();
 		}
 	}
+	
 	
 }
