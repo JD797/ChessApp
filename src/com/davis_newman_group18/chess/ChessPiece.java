@@ -1,7 +1,9 @@
 package com.davis_newman_group18.chess;
 
+import java.io.Serializable;
+
 // Jason
-public abstract class ChessPiece {
+public abstract class ChessPiece implements Serializable {
 	
 	//ChessPiece[][] board;
 	ChessBoard game;
@@ -33,7 +35,7 @@ public abstract class ChessPiece {
 			throw new Exception();
 		}
 	}
-
+	
 	public abstract char getPieceType();
 	public abstract boolean isValidMove(int rank, int file);
 

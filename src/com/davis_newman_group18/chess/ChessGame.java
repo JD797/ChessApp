@@ -8,7 +8,10 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +32,7 @@ public class ChessGame extends Activity {
 	GridLayout grid;
 	ChessboardSquare[][] chessboardDisplay;
 	Button undo, ai, draw, resign;
+	Builder drawDialog;
 	TextView turn;
 	Intent intent;
 	
@@ -44,6 +48,9 @@ public class ChessGame extends Activity {
 	static int enPassantCounter;
 	ChessBoard board;
 	ChessPiece[][] chessboard;
+	
+	ChessPiece lastMovedPiece;
+	ChessBoard prevGameState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +104,57 @@ public class ChessGame extends Activity {
 			
 		} else {
 			
-			//TODO need to do the undo, ai and draw buttons
+			//TODO get undo working
+			undo.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					Boolean undo = false;
+					if(prevGameState == null) {
+						undo = false;
+					} else {
+						lastMovedPiece.game = prevGameState;
+						undo = true;
+					}
+					
+					// if can undo move, get new pointers to board and board array, then re-draw move
+					if (undo) {
+						board = lastMovedPiece.game;
+						chessboard = board.getBoard();
+						validPlayMade = true;
+						drawProposed = false;
+						prevGameState = null;
+						whiteTurn = !whiteTurn;
+						movesMade.removeLast();
+						movesMade.removeLast();
+						updateBoard();
+					} else {
+						Toast.makeText(getApplicationContext(), "Cannot undo", Toast.LENGTH_SHORT).show();
+					}
+					
+				}
+			});
+			
+			//TODO get ai working
+			ai.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			// get draw working
+			draw.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					drawProposed = true;
+					Toast.makeText(getApplicationContext(), "Draw proposed, now please make a valid move", Toast.LENGTH_LONG).show();
+				}
+			});
 			
 			resign.setOnClickListener(new View.OnClickListener() {
 				
@@ -110,6 +167,22 @@ public class ChessGame extends Activity {
 					endGame();
 				}
 			});
+			
+			drawDialog = new AlertDialog.Builder(this)
+		    .setTitle("Draw proposed")
+		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	Toast.makeText(getApplicationContext(), "Draw confirmed", Toast.LENGTH_LONG).show();
+		        	endGame();
+		        }
+		     })
+		    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            drawProposed = false;
+		            drawDialog.setMessage("");
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert);
 		
 		}
 		
@@ -155,7 +228,10 @@ public class ChessGame extends Activity {
 			
 			try {		
 				ChessPiece piece = chessboard[fromCoordinate.row][fromCoordinate.col];
+				prevGameState = piece.game.deepClone();
 				piece.move(toCoordinate.row, toCoordinate.col);
+				
+				lastMovedPiece = piece;
 				
 				if (!replayingGame) {
 					movesMade.add(fromCoordinate);
@@ -195,22 +271,23 @@ public class ChessGame extends Activity {
 					board.enPassantPawn = null;
 				}
 				
-				updateBoard();
-								
 				whiteTurn = !whiteTurn;
-				if (whiteTurn) {
-					turn.setTextColor(Color.WHITE);
-					turn.setText("White Turn");
-				} else {
-					turn.setTextColor(Color.BLACK);
-					turn.setText("Black Turn");
+				updateBoard();
+				
+				if (drawProposed) {
+					String color = whiteTurn ? "White" : "Black";
+					drawDialog.setMessage(color + " player, do you accept the draw?");
+					drawDialog.show();
 				}
+								
 			} catch (Exception e) {
 				Toast.makeText(this, "Invalid Move", Toast.LENGTH_SHORT).show();
+				prevGameState = null;
 			}
 			
 			fromCoordinate = null;
 			toCoordinate = null;
+			
 		}
 		
 	}
@@ -270,6 +347,14 @@ public class ChessGame extends Activity {
 						square.setImageResource(R.drawable.blk_rook);
 				}
 			}
+		}
+		
+		if (whiteTurn) {
+			turn.setTextColor(Color.WHITE);
+			turn.setText("White Turn");
+		} else {
+			turn.setTextColor(Color.BLACK);
+			turn.setText("Black Turn");
 		}
 	}
 	

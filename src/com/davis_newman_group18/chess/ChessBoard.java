@@ -1,7 +1,14 @@
 package com.davis_newman_group18.chess;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 // Jason
-public class ChessBoard {
+public class ChessBoard implements Serializable {
 	
 	static char[] pieceTypes = {'B', 'R', 'Q', 'p', 'N', 'K'};
 	
@@ -48,6 +55,21 @@ public class ChessBoard {
 		bKing = chessBoard[7][4];
 	}
 	
+	public ChessBoard deepClone() {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (ChessBoard) ois.readObject();
+		} catch (IOException e) {
+			return null;
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
 	
 	public ChessPiece[][] getBoard() {
 		return chessBoard;
