@@ -104,7 +104,6 @@ public class ChessGame extends Activity {
 			
 		} else {
 			
-			//TODO get undo working
 			undo.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
@@ -136,17 +135,27 @@ public class ChessGame extends Activity {
 				}
 			});
 			
-			//TODO get ai working
+			//TODO get ai working (weird replicating pieces currently)
 			ai.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
+					ai.setEnabled(false);
+					Coordinate[] coords;
+					if (whiteTurn) {
+						coords = board.aiMove('w');
+					} else {
+						coords = board.aiMove('b');
+					}
+					if (coords != null) {
+						pieceSelected = true;
+						fromCoordinate = coords[0];
+						movePiece(coords[1]);
+					}
+					ai.setEnabled(true);
 				}
 			});
 			
-			// get draw working
 			draw.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
@@ -198,6 +207,7 @@ public class ChessGame extends Activity {
 	
 	public void movePiece(Coordinate coordinate) {
 		
+		if (coordinate == null) return;
 		
 		ChessboardSquare square;
 		

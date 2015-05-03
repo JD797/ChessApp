@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
 
 // Jason
 public class ChessBoard implements Serializable {
@@ -53,6 +55,7 @@ public class ChessBoard implements Serializable {
 		
 		wKing = chessBoard[0][4];
 		bKing = chessBoard[7][4];
+		
 	}
 	
 	public ChessBoard deepClone() {
@@ -175,16 +178,65 @@ public class ChessBoard implements Serializable {
 			for (int file = 0; file < 8; file++) {
 				ChessPiece piece = chessBoard[rank][file];
 				if (piece == null || piece.color != color) continue;
-				for (int r = 0; r < 8; r++) {
-					for(int f = 0; f < 8; f++) {
-						if (piece.isValidMove(r, f))
-							return true;
-					}
-				}
+				if(pieceGetValidMove(piece) != null) return true;
+//				for (int r = 0; r < 8; r++) {
+//					for(int f = 0; f < 8; f++) {
+//						if (piece.isValidMove(r, f))
+//							return true;
+//					}
+//				}
 			}
 		}
 		
 		return false;
+	}
+	
+	private Coordinate pieceGetValidMove(ChessPiece piece) {
+		if (piece == null ) return null;
+		for (int r = 0; r < 8; r++) {
+			for(int f = 0; f < 8; f++) {
+				if (piece.isValidMove(r, f))
+					return new Coordinate(r,f);
+			}
+		}
+		return null;
+	}
+	
+	public Coordinate[] aiMove(char color) {
+		ArrayList<ChessPiece> pieceList = new ArrayList<ChessPiece>();
+		ArrayList<Coordinate> toCoordList = new ArrayList<Coordinate>();
+		for (int rank = 0; rank < 8; rank++) {
+			for (int file = 0; file < 8; file++) {
+				ChessPiece piece = chessBoard[rank][file];
+				if (piece == null || piece.color != color) continue;
+				Coordinate toCoord = pieceGetValidMove(piece);
+				if (toCoord != null) {
+					pieceList.add(piece);
+					toCoordList.add(toCoord);
+				}
+//				for (int r = 0; r < 8; r++) {
+//					for(int f = 0; f < 8; f++) {
+//						if (piece.isValidMove(r, f)) {
+//							Coordinate[] coords = new Coordinate[2];
+//							coords[0] = new Coordinate(rank, file);
+//							coords[1] = new Coordinate(r, f);
+//							return coords;
+//						}
+//					}
+//				}
+			}
+		}
+		
+		if (!pieceList.isEmpty()) {
+			Random rand = new Random();
+			int pieceNum = rand.nextInt((pieceList.size()-1)+1);
+			Coordinate[] coords = new Coordinate[2];
+			coords[0] = new Coordinate(pieceList.get(pieceNum).rank, pieceList.get(pieceNum).file);
+			coords[1] = toCoordList.get(pieceNum);
+			 return coords;
+		}
+		
+		return null;
 	}
 	
 }
