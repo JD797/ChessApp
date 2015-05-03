@@ -1,9 +1,6 @@
 package com.davis_newman_group18.chess;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -15,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -136,13 +132,13 @@ public class ChessGame extends Activity {
 				}
 			});
 			
-			//TODO get ai working
 			ai.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
+					int[] aiMove = board.aiMove(whiteTurn);
+					movePiece(new Coordinate(aiMove[0], aiMove[1]));
+					movePiece(new Coordinate(aiMove[2], aiMove[3]));
 				}
 			});
 			
@@ -152,7 +148,7 @@ public class ChessGame extends Activity {
 				@Override
 				public void onClick(View v) {
 					drawProposed = true;
-					Toast.makeText(getApplicationContext(), "Draw proposed, now please make a valid move", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Draw proposed, now please make a valid move", Toast.LENGTH_SHORT).show();
 				}
 			});
 			
@@ -283,6 +279,7 @@ public class ChessGame extends Activity {
 			} catch (Exception e) {
 				Toast.makeText(this, "Invalid Move", Toast.LENGTH_SHORT).show();
 				prevGameState = null;
+				// TODO might need to make drawProposed false here
 			}
 			
 			fromCoordinate = null;

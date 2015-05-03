@@ -187,4 +187,24 @@ public class ChessBoard implements Serializable {
 		return false;
 	}
 	
+	public int[] aiMove(boolean whiteTurn) {
+		char color = whiteTurn ? 'w' : 'b';
+		for (int rank = 0; rank < 8; rank++) {
+			for (int file = 0; file < 8; file++) {
+				ChessPiece piece = chessBoard[rank][file];
+				if (piece == null || piece.color != color) continue;
+				for (int r = 0; r < 8; r++) {
+					for(int f = 0; f < 8; f++) {
+						if (piece.isValidMove(r, f)) {
+							int[] moveCoordinates = {rank, file, r, f};
+							return moveCoordinates;
+						}
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 }
