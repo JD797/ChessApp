@@ -12,9 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridLayout.LayoutParams;
 import android.widget.ImageView;
@@ -29,7 +31,9 @@ public class ChessGame extends Activity {
 	ChessboardSquare[][] chessboardDisplay;
 	Button undo, ai, draw, resign;
 	Builder drawDialog;
+	Builder saveDialog;
 	TextView turn;
+	EditText input;
 	Intent intent;
 	
 	boolean pieceSelected = false;
@@ -85,6 +89,7 @@ public class ChessGame extends Activity {
 					
 					if (!iterator.hasNext()) {
 						ai.setEnabled(false);
+						Toast.makeText(getApplicationContext(), "End of recording", Toast.LENGTH_LONG).show();
 					}
 				}
 			});
@@ -179,12 +184,55 @@ public class ChessGame extends Activity {
 		        }
 		     })
 		    .setIcon(android.R.drawable.ic_dialog_alert);
-		
+			
+			saveDialog = new AlertDialog.Builder(this)
+		    .setTitle("Save Game")
+		    .setMessage("Would you like to save a recording of this game?")
+		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	setSaveTitle();
+		        }
+		     })
+		    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	startActivity(intent);
+	        		finish();
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert);
 		}
 		
 		initializeBoard();
 		startGame();
 		
+	}
+	
+	public void setSaveTitle() {
+		final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.create();
+	    final EditText input = new EditText(this);
+	    input.setHint("Save title");
+	    alertDialog.setTitle("Enter Save Title");
+	    alertDialog.setView(input);
+	    alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	SavedGame save = new SavedGame(input.getText().toString(), movesMade);
+	        	SavedGame.savedGames.add(save);
+	        	try {
+	        		writeData();
+	        	} catch (Exception e) { }
+	        	startActivity(intent);
+        		finish();
+	        }
+	     });
+	    
+	     alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	startActivity(intent);
+        		finish();
+	        }
+	     });
+	    alertDialog.show();
 	}
 	
 	public void startGame() {
@@ -292,15 +340,8 @@ public class ChessGame extends Activity {
 	public void endGame() {
 		// TODO if not replayingGame, ask user if they want to save game (get save title if they do), then go back to main activity
 		// below savedGame is a test
-		SavedGame savedGame = new SavedGame("test", movesMade);
-		SavedGame.savedGames.add(savedGame);
-		try {
-			writeData();
-		} catch (Exception e) { 
-			e.printStackTrace();
-		}
-		startActivity(intent);
-		finish();
+		saveDialog.show();
+		
 	}
 	
 	public void updateBoard() {
